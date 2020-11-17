@@ -18,11 +18,11 @@
 
 # Решение задания 
 
-![image-20201117214908805](/home/vladimir/.config/Typora/typora-user-images/image-20201117214908805.png)
+![image-20201117214908805](https://i.ibb.co/5rDgqwV/image-20201117214908805.png)
 
 В настройках config/app.php я добавил сущность поставщика , в которой мы можем добавлять поставщиков , с параметрами их API .Название поставщика храниться в  файле .env , следовательно таким образом мы можем поменять поставщика в считанные минуты.
 
-![image-20201117215213113](/home/vladimir/.config/Typora/typora-user-images/image-20201117215213113.png)
+![image-20201117215213113](https://i.ibb.co/sKxmS8H/image-20201117215213113.png)
 
 
 
@@ -136,7 +136,7 @@ POST api/events/{eventId:\d+}/reserve
 
 Порт для nginx прописан 3552
 
-![image-20201117215942910](/home/vladimir/.config/Typora/typora-user-images/image-20201117215942910.png)
+![https://i.ibb.co/vP9hYGL/image-20201117215942910.png](https://i.ibb.co/vP9hYGL/image-20201117215942910.png)
 
 # Front-end 
 
