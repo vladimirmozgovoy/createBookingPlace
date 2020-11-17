@@ -1,0 +1,21 @@
+version: "3.3"
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: deployDocker/nginx/Dockerfile
+    ports:
+      - "3552:80"
+    links:
+      - php-fpm
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - php-fpm
+  php-fpm:
+    build:
+      context: .
+      dockerfile: deployDocker/php/Dockerfile
+    volumes:
+      - ./:/var/www
+    container_name: php-fpm_test_task
