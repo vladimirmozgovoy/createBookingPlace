@@ -1,61 +1,144 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+# Тестовое задание 
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Суть задания
+Сделать тонкий клиент на одном из популярных фреймворков (желательно на Laravel),
+во фронтенде должны быть страницы:
+● список мероприятий
+● детальная страница мероприятия со списком событий
+● детальная страница события со схемой зала и возможностью выбрать и
+забронировать места, для брони нужно запросить имя покупателя
+● после бронирования вывести id брони, пришедшее из API
+База данных не нужна, ничего сохранять не нужно.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Еще Вам известно, что через некоторое время поставщик билетов (шлюз) может
+измениться - список методов будет такой же, реализация API другая. Смена
+поставщика должна быть максимально простой.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# Решение задания 
 
-## Learning Laravel
+![image-20201117214908805](/home/vladimir/.config/Typora/typora-user-images/image-20201117214908805.png)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+В настройках config/app.php я добавил сущность поставщика , в которой мы можем добавлять поставщиков , с параметрами их API .Название поставщика храниться в  файле .env , следовательно таким образом мы можем поменять поставщика в считанные минуты.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+![image-20201117215213113](/home/vladimir/.config/Typora/typora-user-images/image-20201117215213113.png)
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+## Методы
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+### Список мероприятий
 
-## Contributing
+#### Запрос
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+GET api/meetings
 
-## Code of Conduct
+#### Ответ
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```javascript
+{"response":[{"id":1,"name":"Show #1"},{"id":2,"name":"Show #2"}...}
+```
 
-## Security Vulnerabilities
+| Параметр | Тип     | Описание             |
+| -------- | ------- | -------------------- |
+| id       | integer | ID мероприятия       |
+| name     | string  | Название мероприятия |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Список событий мероприятия
 
-## License
+#### Запрос
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+GET api/meetings/{meetingId:\d+}/events
+
+| Параметр  | Тип     | Описание       |
+| --------- | ------- | -------------- |
+| meetingId | integer | ID мероприятия |
+
+#### Ответ
+
+```javascript
+{"response":[{"id":46,"showId":10,"date":"2019-08-22 20:26:38"},{"id":47,"showId":10,"date":"2019-09-01 20:26:38"}...}
+```
+
+| Параметр  | Тип     | Описание       |
+| --------- | ------- | -------------- |
+| id        | integer | ID события     |
+| meetingId | integer | ID мероприятия |
+| date      | string  | Дата события   |
+
+### Список мест события
+
+#### Запрос
+
+GET api/events/{eventId:\d+}/places
+
+| Параметр | Тип     | Описание   |
+| -------- | ------- | ---------- |
+| eventId  | integer | ID события |
+
+#### Ответ
+
+```javascript
+{"response":[{"id":1,"x":0,"y":0,"width":20,"height":20,"is_available":true},{"id":2,"x":0,"y":30,"width":20,"height":20,"is_available":true},...}
+```
+
+| Параметр     | Тип     | Описание       |
+| ------------ | ------- | -------------- |
+| id           | integer | ID места       |
+| x            | float   | Координата X   |
+| y            | float   | Координата Y   |
+| width        | float   | Ширина         |
+| height       | float   | Высота         |
+| is_available | boolean | Место доступно |
+
+
+### Забронировать места события
+
+#### Запрос
+
+POST api/events/{eventId:\d+}/reserve
+
+##### GET параметры:
+
+| Параметр | Тип     | Описание   |
+| -------- | ------- | ---------- |
+| eventId  | integer | ID события |
+
+##### POST параметры:
+
+| Параметр | Тип    | Описание       |
+| -------- | ------ | -------------- |
+| name     | string | Имя покупателя |
+| places   | array  | Список ID мест |
+
+#### Ответ
+
+```javascript
+{
+"response": {
+"success": true,
+"reservation_id": "5d519fe58e3cf"
+}
+}
+```
+
+| Параметр       | Тип     | Описание               |
+| -------------- | ------- | ---------------------- |
+| success        | boolean | Результат бронирования |
+| reservation_id | string  | ID резерва             |
+
+# Развертка проекта 
+
+Развернуть проект можно просто через докер.
+
+> docker-compose up
+
+Порт для nginx прописан 3552
+
+![image-20201117215942910](/home/vladimir/.config/Typora/typora-user-images/image-20201117215942910.png)
+
+# Front-end 
+
+Front-end написан , внутри приложения с помощью view модулей . Я не выбрал SPA , потому что не было времени его разворачивать .
+
